@@ -2201,12 +2201,17 @@
    ========================================= */
     .rev-layout {
       display: grid;
-      grid-template-columns: 220px 1fr 280px;
+      grid-template-columns: auto 1fr 280px;
       height: calc(100vh - var(--topbar-h) - 96px);
     }
 
     .rev-sidebar {
+      width: 220px;
+      min-width: 200px;
+      max-width: 370px;
+      resize: horizontal;
       overflow-y: auto;
+      overflow-x: hidden;
       border-right: 1px solid var(--border);
       padding: 14px;
       background: var(--surface);

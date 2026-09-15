@@ -1116,38 +1116,41 @@
                 <div
                   style="font-size:11px;font-weight:700;color:var(--text-3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em">
                   Share a link or file</div>
-                <select id="share-type-select">
-                  <option value="drive"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"
-                      stroke="currentColor" stroke-width="1.6">
-                      <path d="M1 4a1 1 0 011-1h4l2 2h6a1 1 0 011 1v7a1 1 0 01-1 1H2a1 1 0 01-1-1V4z" />
-                    </svg> Google Drive Folder</option>
-                  <option value="doc"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor"
-                      stroke-width="1.6">
-                      <path d="M3 1h7l3 3v11H3V1z" />
-                      <path d="M10 1v3h3" />
-                      <path d="M5 7h6M5 10h4" />
-                    </svg> Document / Script</option>
-                  <option value="slides"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"
-                      stroke="currentColor" stroke-width="1.6">
-                      <rect x="1" y="1" width="14" height="11" rx="1.5" />
-                      <path d="M5 9V6M8 9V4M11 9V7" />
-                    </svg> Slides / Storyboard</option>
-                  <option value="zip"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor"
-                      stroke-width="1.6">
-                      <rect x="3" y="1" width="10" height="14" rx="1.5" />
-                      <path d="M6 1v3M10 1v3M6 4h4M6 7h4" />
-                    </svg> ZIP Archive</option>
-                  <option value="other"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"
-                      stroke="currentColor" stroke-width="1.8">
-                      <path d="M6 10.5a4 4 0 005.5-5.5L10 3.5a4 4 0 00-5.5 5.5" />
-                      <path d="M10 5.5a4 4 0 00-5.5 5.5L6 12.5a4 4 0 005.5-5.5" />
-                    </svg> Other Link</option>
-                </select>
-                <input type="text" id="share-url-input" placeholder="Paste Google Drive link or URL…">
-                <input type="text" id="share-label-input" placeholder="Label (e.g. V2 Final Cut, Script v2)">
-                <textarea id="share-note-input"
-                  style="width:100%;background:var(--surface-2);border:1px solid var(--border);border-radius:7px;padding:8px 12px;font-size:12.5px;font-family:inherit;color:var(--text);outline:none;resize:none;margin-bottom:8px"
-                  rows="2" placeholder="Note for reviewers (optional)…"></textarea>
+                <div class="form-row">
+                  <label>Batch Name <span class="req">*</span></label>
+                  <input class="form-input" id="share-batch-name" placeholder="e.g. Batch 1, Batch 2…" style="margin-bottom:8px">
+                </div>
+                <div class="form-row">
+                  <label>Units Included <span class="req">*</span>
+                    <span style="font-size:11px;color:var(--text-3);font-weight:400"> — Select all that apply (mandatory)</span>
+                  </label>
+                  <div id="share-batch-units-list" style="display:flex;flex-direction:column;gap:6px;border:1px solid var(--border);border-radius:8px;padding:10px 12px;background:var(--surface-2);margin-bottom:8px">
+                    <span style="font-size:11.5px;color:var(--text-3)">Loading units…</span>
+                  </div>
+                </div>
+                <div class="form-row" id="share-pra-row" style="display:none">
+                  <label>Send to PRA for Review <span class="req">*</span></label>
+                  <select class="form-input" id="share-pra-select" style="margin-bottom:8px">
+                    <option value="">Select a PRA…</option>
+                    <option value="Ankit Verma">Ankit Verma (PRA)</option>
+                  </select>
+                </div>
+                <div class="form-row">
+                  <label>Google Drive Link / Folder URL <span class="req">*</span></label>
+                  <input class="form-input" id="share-url-input" type="url" placeholder="https://drive.google.com/drive/folders/…" style="margin-bottom:8px">
+                </div>
+                <div class="form-row">
+                  <label>Individual Deliverable / ZIP Links <span style="font-size:11px;color:var(--text-3);font-weight:400">(optional)</span></label>
+                  <textarea class="form-input" id="share-files-input" rows="2" placeholder="https://drive.google.com/.../video.mp4" style="resize:vertical;min-height:40px;margin-bottom:8px"></textarea>
+                </div>
+                <div class="form-row">
+                  <label>Batch Label / Version Tag</label>
+                  <input class="form-input" id="share-label-input" placeholder="e.g. V2 Final Cut, Draft…" style="margin-bottom:8px">
+                </div>
+                <div class="form-row">
+                  <label>Notes for Reviewer <span style="font-size:11px;color:var(--text-3);font-weight:400">(optional)</span></label>
+                  <textarea class="form-input" id="share-note-input" rows="2" placeholder="Any instructions, timestamps to check…" style="resize:vertical;min-height:40px;margin-bottom:8px"></textarea>
+                </div>
                 <div style="display:flex;flex-direction:column;gap:8px">
                   <button class="btn btn-primary btn-sm" onclick="submitShareForm()" style="width:100%">Submit for Review</button>
                   <button class="btn btn-ghost btn-sm" onclick="toggleShareForm()" style="width:100%">Cancel</button>
