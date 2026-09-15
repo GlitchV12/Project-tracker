@@ -1,0 +1,11 @@
+1. **Batch-based artifact review:** Videos from PRA are submitted in bulk (e.g., 12 videos for a course), not lesson-wise. The “Upload for Review” workflow should therefore be **batch-based**, with a clear approach for syncing timelines across the batch. Lets disciuss how we can make the UI for this page instead of you going based on assumptions.
+2. When submitting a review batch, users should be able to select **multiple lessons/modules** the artifacts belong to (e.g., Module 1 – L1 and L2). This provides flexibility while maintaining clear lesson mapping. Accordingly, the **Work Items view should be updated to display batches rather than individual lessons**. this will help is understad that if 20 videos are submitted, they were submitted for L2 and L2 so that manager doesnt have to sit and figure out.
+3. The **Add Notes** button should be integrated within the notes box. The text input should remain **fixed at the bottom**, while previous messages remain scrollable above it.
+4. theere is no option to remove a moduel after adding it.
+5. The edit message feature is not working.
+6. The edit message featre when someone edits the message on the messge card itself may be on the right top corner besides the edit icon we cna add a history icon there. so that if someone has edited the message earlier it should be visible to the user.
+7. in the overview page the name it displayed twice i.e "QM101 — Overview" and "QM101 — Complete Course Revamp" insted lets keep only the "QM101 — Overview" so this will give more space to other elements. Infact remove the Overview, workitem text as well as the bar below it anyways highlights which menu we are on.
+8. Strictly make sure that em dashes are not present in the UI anywhere. It can be in code comments.
+9. the cancel button in SHARE A LINK OR FILE card is hald not visible its overflowing below the sidfe panel.
+10. The hide mactivity button is also overflowing out of the screen, remove the onkey emoji.
+11. Use Simple flaticons instead of the current emojis as icons.

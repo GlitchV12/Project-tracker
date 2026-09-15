@@ -2022,14 +2022,14 @@ window.ROLES = ROLES;
     </div>
     <div style="padding:0 20px 16px">
       <div class="review-package-card">
-        <div class="drive-card" style="margin-bottom:0;border:none;border-radius:0;box-shadow:none" onclick="window.open('#')">
+        <div class="drive-card" style="margin-bottom:0;border:none;border-radius:0;box-shadow:none" onclick="window.open('${escapeHtml(activeVer.driveUrl)}', '_blank')">
           <div class="drive-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 4a1 1 0 011-1h4l2 2h6a1 1 0 011 1v7a1 1 0 01-1 1H2a1 1 0 01-1-1V4z"/></svg></div>
           <div class="drive-info">
             <div class="drive-name">${escapeHtml(activeVer.driveName)}</div>
             <div class="drive-url">${escapeHtml(activeVer.driveUrl)}</div>
             <div class="drive-meta">Shared by ${escapeHtml(activeVer.submitter)} · ${activeVer.time}</div>
           </div>
-          <button class="btn btn-primary btn-sm">Open Folder →</button>
+          <button class="btn btn-primary btn-sm">Open Link →</button>
         </div>
 
         <!-- Collapsible Attached Files Bar -->
@@ -2159,6 +2159,27 @@ window.ROLES = ROLES;
           
           document.getElementById('new-name').value = '';
           if (document.getElementById('new-start-date')) document.getElementById('new-start-date').value = '';
+        }
+
+        function markAllRead() {
+          const unreadItems = document.querySelectorAll('#screen-notifications .notif-item.unread');
+          if (unreadItems.length === 0) return;
+          
+          unreadItems.forEach(item => {
+            item.classList.remove('unread');
+          });
+          
+          const countText = document.getElementById('notif-count-text');
+          if (countText) countText.textContent = '0 unread';
+          
+          // Also update the sidebar badge if it exists
+          const sidebarBadge = document.querySelector('.nav-count');
+          if (sidebarBadge) sidebarBadge.style.display = 'none';
+
+          const topbarDot = document.querySelector('.tb-dot');
+          if (topbarDot) topbarDot.style.display = 'none';
+          
+          showToast('<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="8" r="6.5"/><path d="M5 8l2.5 2.5L11 6"/></svg> All notifications marked as read', 'success');
         }
 
         function showToast(msg, type) {
@@ -3450,6 +3471,7 @@ window.quickAssignLesson = quickAssignLesson;
 window.setTimelineView = setTimelineView;
 window.onTimelineMonthChange = onTimelineMonthChange;
 window.timelineNav = timelineNav;
+window.markAllRead = markAllRead;
 window.closeEditBatchModal = closeEditBatchModal;
 window.closeAddLessonModal = closeAddLessonModal;
 window.calcDaysLeft = calcDaysLeft;
