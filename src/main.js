@@ -3457,7 +3457,35 @@ window.addEventListener('DOMContentLoaded', () => {
   openModuleWork('m1');
   // Initial active view is dashboard
   nav('dashboard');
+
+  // Initialize rev-sidebar resizer
+  const revSidebar = document.getElementById('rev-sidebar');
+  const revSidebarResizer = document.getElementById('rev-sidebar-resizer');
+  if (revSidebar && revSidebarResizer) {
+    let isResizing = false;
+    revSidebarResizer.addEventListener('mousedown', (e) => {
+      isResizing = true;
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    });
+    document.addEventListener('mousemove', (e) => {
+      if (!isResizing) return;
+      const rect = revSidebar.getBoundingClientRect();
+      let newWidth = e.clientX - rect.left;
+      if (newWidth < 200) newWidth = 200;
+      if (newWidth > 370) newWidth = 370;
+      revSidebar.style.width = newWidth + 'px';
+    });
+    document.addEventListener('mouseup', () => {
+      if (isResizing) {
+        isResizing = false;
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      }
+    });
+  }
 });
+
 
 
 // Expose all functions to global scope for inline HTML handlers

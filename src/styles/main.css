@@ -2206,15 +2206,28 @@
     }
 
     .rev-sidebar {
+      position: relative;
       width: 220px;
       min-width: 200px;
       max-width: 370px;
-      resize: horizontal;
       overflow-y: auto;
       overflow-x: hidden;
       border-right: 1px solid var(--border);
       padding: 14px;
       background: var(--surface);
+    }
+
+    .rev-sidebar-resizer {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 6px;
+      height: 100%;
+      cursor: col-resize;
+      z-index: 10;
+    }
+    .rev-sidebar-resizer:hover {
+      background: var(--border);
     }
 
     .ver-card {
