@@ -2099,6 +2099,10 @@ window.ROLES = ROLES;
           const iconMap = { 'drive': '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 4a1 1 0 011-1h4l2 2h6a1 1 0 011 1v7a1 1 0 01-1 1H2a1 1 0 01-1-1V4z"/></svg>', 'doc': '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 1h7l3 3v11H3V1z"/><path d="M10 1v3h3"/><path d="M5 7h6M5 10h4"/></svg>', 'slides': '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1" y="1" width="14" height="11" rx="1.5"/><path d="M5 9V6M8 9V4M11 9V7"/></svg>', 'zip': '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="1" width="10" height="14" rx="1.5"/><path d="M6 1v3M10 1v3M6 4h4M6 7h4"/></svg>', 'other': '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 10.5a4 4 0 005.5-5.5L10 3.5a4 4 0 00-5.5 5.5"/><path d="M10 5.5a4 4 0 00-5.5 5.5L6 12.5a4 4 0 005.5-5.5"/></svg>' };
           const typeIcon = iconMap[type] || '<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 4a1 1 0 011-1h4l2 2h6a1 1 0 011 1v7a1 1 0 01-1 1H2a1 1 0 01-1-1V4z"/></svg>';
 
+          const activeVer = REVIEW_VERSIONS_DATA.find(v => v.id === curActiveVersionId);
+          const modId = activeVer ? activeVer.moduleId : 'm3';
+          const batchId = activeVer ? activeVer.batchId : 'batch-m3-1';
+
           const todayStr = new Date().toISOString().split('T')[0];
           const newVersion = {
             id: newVerId,
@@ -2110,6 +2114,8 @@ window.ROLES = ROLES;
             status: 'Awaiting Review',
             statusPill: 'p-warning',
             statusColor: 'var(--warning)',
+            moduleId: modId,
+            batchId: batchId,
             driveName: label || `QM101 - M3, L4 - Probability Distributions - ${nextTag}`,
             driveUrl: url || `drive.google.com/drive/folders/${nextTag.toLowerCase()}-submission (view access given)`,
             note: note || `Submitted ${nextTag} deliverable package for review with updated assets.`,
@@ -2133,6 +2139,26 @@ window.ROLES = ROLES;
               author: `${authorName} (${curRole})`,
               desc: `<b>New Version Shared:</b> ${newVersion.driveName}. Submitter Note: "${escapeHtml(newVersion.note)}"`
             });
+          }
+
+          // Force module status back to WIP
+          const modHeader = document.getElementById('mod-header-' + modId);
+          if (modHeader) {
+            const pill = modHeader.querySelector('.pill');
+            if (pill) {
+              pill.className = 'pill p-editing';
+              pill.textContent = 'WIP';
+            }
+          }
+
+          // Force batch status to Pending
+          const treeItem = document.getElementById('tree-' + modId + '-' + batchId);
+          if (treeItem) {
+            const batchModule = MODULES_DATA[modId];
+            const batch = batchModule && (batchModule.batches || []).find(item => item.id === batchId);
+            if (batch) {
+               treeItem.innerHTML = '<span class="pill p-warning" style="font-size:10px">Pending</span> ' + batch.num + ' · ' + (batch.units.length === 1 ? batch.units[0].split(' - ')[0] : batch.units.length + ' units');
+            }
           }
 
           // Clear inputs
@@ -2305,6 +2331,18 @@ window.ROLES = ROLES;
     `;
           }
 
+          // 6. Update Sidebar Pills
+          if (activeVer) {
+            const treeItem = document.getElementById('tree-' + activeVer.moduleId + '-' + activeVer.batchId);
+            if (treeItem) {
+              const batchModule = MODULES_DATA[activeVer.moduleId];
+              const batch = batchModule && (batchModule.batches || []).find(item => item.id === activeVer.batchId);
+              if (batch) {
+                treeItem.innerHTML = '↺ <span class="pill p-danger" style="font-size:10px">Changes Req.</span> ' + batch.num + ' · ' + (batch.units.length === 1 ? batch.units[0].split(' - ')[0] : batch.units.length + ' units');
+              }
+            }
+          }
+
           // Reset form inputs
           if (descEl) descEl.value = '';
           document.querySelectorAll('input[name="req-cat"]').forEach(c => c.checked = false);
@@ -2350,7 +2388,7 @@ window.ROLES = ROLES;
               batch.reviewComment = note || 'Manager approved this review request.';
               batch.approvalNotice = 'Request approved. Please update the project timeline accordingly.';
               const treeItem = document.getElementById('tree-' + activeVer.moduleId + '-' + activeVer.batchId);
-              if (treeItem) treeItem.innerHTML = '<span class="pill p-complete" style="font-size:10px">Approved</span> ' + batch.num + ' · ' + (batch.units.length === 1 ? batch.units[0].split(' - ')[0] : batch.units.length + ' units');
+              if (treeItem) treeItem.innerHTML = '&#10003; <span class="pill p-complete" style="font-size:10px">Reviewed</span> ' + batch.num + ' · ' + (batch.units.length === 1 ? batch.units[0].split(' - ')[0] : batch.units.length + ' units');
             }
           }
 
@@ -2793,9 +2831,19 @@ window.ROLES = ROLES;
             el.className = 'tree-lesson';
             el.id = 'tree-' + modId + '-' + batchId;
             const unitLabel = selectedUnits.length === 1 ? selectedUnits[0].split(' - ')[0] : selectedUnits.length + ' units';
-            el.innerHTML = '<span class="pill p-warning" style="font-size:10px">Review</span> ' + name + ' · ' + unitLabel;
+            el.innerHTML = '<span class="pill p-warning" style="font-size:10px">Pending</span> ' + name + ' · ' + unitLabel;
             el.onclick = () => selBatch(modId, batchId);
             ch.appendChild(el);
+          }
+
+          // Force module status back to WIP since there is a new pending batch
+          const modHeader = document.getElementById('mod-header-' + modId);
+          if (modHeader) {
+            const pill = modHeader.querySelector('.pill');
+            if (pill) {
+              pill.className = 'pill p-editing';
+              pill.textContent = 'WIP';
+            }
           }
 
           closeAddBatchModal();
